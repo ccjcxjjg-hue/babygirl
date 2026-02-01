@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Proposal 💖</title>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<style>
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff4d6d, #ff99c8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 20px;
+}
+
+#message {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: center;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: all 0.1s ease;
+  position: fixed;
+  z-index: 1000;
+}
+
+#yes {
+  background-color: #ff66aa;
+  left: 50%;
+  top: 60%;
+  transform: translateX(-50%);
+}
+
+#no {
+  background-color: #cc3366;
+  left: 50%;
+  top: 70%;
+  transform: translateX(-50%);
+}
+
+.heart {
+  width: 20px; 
+  height: 20px; 
+  position: absolute; 
+  background: red;
+  transform: rotate(-45deg); 
+  animation: float 1.5s ease forwards; 
+  z-index: 0;
+}
+
+.heart::before, .heart::after {
+  content: ""; 
+  width: 20px; 
+  height: 20px; 
+  background: red; 
+  border-radius: 50%; 
+  position: absolute;
+}
+
+.heart::before { top: -10px; left: 0; }
+.heart::after { top: 0; left: 10px; }
+
+@keyframes float {
+  0% { opacity: 1; transform: translate(0,0) rotate(-45deg) scale(1); }
+  100% { opacity: 0; transform: translate(-50px,-100px) rotate(-45deg) scale(1.5); }
+}
+</style>
+</head>
+<body>
+
+<h1>Will you be my Valentine, Aranha Ji? 💖</h1>
+<button id="yes">Yes 💕</button>
+<button id="no">No 😢</button>
+<div id="message">You are the best thing that ever happened to me!</div>
+
+<script>
+// Initialize EmailJS
+emailjs.init("2LYySpiUOmcnV7zuS");
+
+const noButton = document.getElementById('no');
+const yesButton = document.getElementById('yes');
+
+const noMessages = [
+  "Try again!", "Really?", "Are you sure?", "Maybe later?", "Think twice!",
+  "No way!", "Haha, no!", "Not yet!", "Oops, no!", "Try harder!",
+  "Don't be shy!", "Come on!", "Maybe another time!", "I don't think so!",
+  "Seriously?", "Nope!", "Not happening!", "Retry!", "Still no!", "Give it another shot!"
+];
+
+// Function to move "No" button randomly
+function moveNoButton() {
+  const padding = 50;
+  const x = Math.random() * (window.innerWidth - noButton.offsetWidth - padding);
+  const y = Math.random() * (window.innerHeight - noButton.offsetHeight - padding);
+  noButton.style.left = `${x}px`;
+  noButton.style.top = `${y}px`;
+
+  const randomIndex = Math.floor(Math.random() * noMessages.length);
+  noButton.textContent = noMessages[randomIndex];
+}
+
+// Aggressive mouse detection: move button if cursor is near
+document.addEventListener('mousemove', (e) => {
+  // Heart animation
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = e.clientX - 10 + 'px';
+  heart.style.top = e.clientY - 10 + 'px';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 1500);
+
+  // Detect cursor near "No" button
+  const noRect = noButton.getBoundingClientRect();
+  const distance = Math.hypot(
+    e.clientX - (noRect.left + noRect.width/2),
+    e.clientY - (noRect.top + noRect.height/2)
+  );
+
+  if(distance < 100){ // cursor is very close
+    moveNoButton();
+  }
+});
+
+// Yes button click to send EmailJS
+yesButton.addEventListener('click', () => {
+  const templateParams = {
+    to_name: "Ivish",
+    from_name: "Aranha Ji",
+    message: "She said YES! 💖 Aranha Ji will be my Valentine!"
+  };
+
+  emailjs.send("service_k9o3e3o", "template_lixv5lg", templateParams)
+    .then((response) => {
+      alert("Yay! She said YES! 💌 Email sent successfully!");
+      console.log("SUCCESS!", response.status, response.text);
+    }, (error) => {
+      alert("Oops! Email failed 😢");
+      console.log("FAILED...", error);
+    });
+});
+</script>
+
+</body>
+</html>
+</body>
+</html>
